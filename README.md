@@ -4,7 +4,7 @@ Dockerfile for creating an image containing a fully working MobiDB Lite release,
 # How it works
 The Dockerfile automatically creating an Ubuntu 18.04 image with Python 2 and 3 either, both required to run MobiDB Lite with default parameters:
 
-`python3 mobidb_liste.py -f 0 test/sequences.fasta`
+`python3 mobidb_liste.py -f fasta test/sequences.fasta`
 
 where `sequences.fasta` is a multi-fasta file containing a few sequences, used to assess if scripts are working or not.
 
