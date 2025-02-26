@@ -1,31 +1,28 @@
 # mobidb_lite_docker
-Dockerfile for creating an image containing a fully working MobiDB Lite release, according to the latest available in Interproscan public repository
+MobiDB-lite is a lightweight tool for predicting intrinsic disorder in proteins. This guide explains how to build and use the Dockerized version of [MobiDB-lite 4.0](https://github.com/BioComputingUP/MobiDB-lite)
 
-# How it works
-The Dockerfile automatically creating an Ubuntu 18.04 image with Python 2 and 3 either, both required to run MobiDB Lite with default parameters:
+## Building the Docker image
+Before running the tool, you need to build the Docker image.
 
-`python3 mobidb_liste.py -f fasta test/sequences.fasta`
+### Step 1: clone this repository
+    git clone https://github.com/BioComputingUP/MobiDB-lite_docker.git
+    cd MobiDB-lite_docker
 
-where `sequences.fasta` is a multi-fasta file containing a few sequences, used to assess if scripts are working or not.
+### Step 2: Build the Docker image
+    docker build -t mobidb-lite .
+This creates a Docker image named mobidb-lite
 
-Files are downloaded from EMBL-EBI's public Interproscan repository, hence not provided within this repository. After having downloaded the full repository, most of the file except for `mobidb/<version>` and dependencies folders are removed. Note that downloading process could take a few minutes, depending to connection and network capabilities.
+## Running MobiDB-lite in Docker
+Once the image is built, you can use it to analyze multi-fasta files. 
 
-# Sources
+### Basic usage
 
-It is possible to retrieve source code by either downloading it from Interporscan openly accessible GitHub repository, which is the default function, carried out automatically by the Dockerfile while building the relative image.
+    docker run --rm -v $PWD:/data mobidb-lite [options] [input_file] [output_file]
 
-Otherwise, it is possible to build the image starting from a local version of MobiDB Lite by commenting out the lines right under `# Retrieve remote mobidb folder` comment, while removing the comment from the lines just below `# Retrieve local mobidb folder` comment. This last option has been used while retrieving 2020's version of the program.
+Example:
 
-# Branches
+    docker run --rm -v $PWD:/data mobidb-lite /data/data/first10sp.fasta output.tsv
 
-## Main
-In the main branch of this repository some test are provided, running in Python 3, hence fully compatible with MobiDB Lite environment. Tests try to figure out if dependencies are correctly satisfied in the generated image and how these performs, expecially with respect to multithreading related parameters.
+To calculate the ensemble properties, you must specify --extra option with --format mobidb:
 
-Moreover, benchmarks are provided with respect to some parameters, such as number of threads involved in MobiDB Lite predictor. Benchmarks are accessible as a Jupyter Notbeook by running the container, based on the Dockerfile's image, with the following command:
-
-`docker run -p 8888:8888 -it --name mdb mobidb:2.0.0`
-
-which, given that build image's name is `mobidb_lite:2.0.0`, will provide a link accessible from a web browser on the user's local machine.
-
-## Minimal
-This branch provides a Dockerfile for buolding the same image but installs only the main files and discards, instead, all the testing and benchmarking stuff.
+    docker run --rm -v $PWD:/data mobidb-lite --extra --format mobidb /data/data/first10sp.fasta output.mjson
