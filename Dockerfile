@@ -1,42 +1,19 @@
-# Use Ubuntu 18.04 LTS as base image
-FROM ubuntu:18.04
+FROM python:3.12-slim
 
-# Set working directory
-WORKDIR /usr/src/mobidb
+# Set the working directory inside the container
+WORKDIR /usr/src/app
 
-# Make tests directory
-RUN mkdir ./dockertest
-# Copy test notebook into remote test folder
-COPY ./test.ipynb ./dockertest/test.ipynb
-# Copy data folder into remote test folder
-COPY ./data ./dockertest/data
-
-# Install python
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3.7 python3-pip python3-setuptools python3-wheel \
-    python2.7 python-pip \
     git && \
     apt-get clean  && \
     apt-get autoremove
 
-# Install required python packages
-RUN pip3 install wheel numpy notebook matplotlib tqdm
-
-# # Retrieve remote mobidb folder (from Interproscan repository)
-# RUN git clone https://github.com/ebi-pf-team/interproscan && \
-#     mv ./interproscan/core/jms-implementation/support-mini-x86-32/bin/mobidb/2.0/* ./ && \  # Uncomment for version 2.0
-# #     mv ./interproscan/core/jms-implementation/support-mini-x86-32/bin/mobidb/1.5/* ./ && \  # Uncomment for version 1.5
-# #     mv ./interproscan/core/jms-implementation/support-mini-x86-32/bin/mobidb/1.0/* ./ && \  # Uncomment for version 1.0
-#     mv ./interproscan/core/jms-implementation/src/test/resources/data/mobidb/1.0/test_mobidb_seqs.fasta  ./test/sequences.fasta && \
-#     rm -r ./interproscan
-
-# Retrieve remove mobidb folder (from MobiDB Lite repository)
 RUN git clone https://github.com/BioComputingUP/MobiDB-lite.git && \
     mv ./MobiDB-lite/* ./ && \
     rm -r ./MobiDB-lite
 
-# # Retrieve local mobidb folder
-# COPY path/to/mobidb ./
+ENV PYTHONPATH=/usr/src/app/src
 
-# Instantiate new notebook
-CMD /bin/bash -c "jupyter notebook --ip='*' --port=8888 --no-browser --allow-root ./dockertest/test.ipynb"
+RUN pip install scikit-learn==1.4.2 numba==0.59.1 pandas==2.1.3 numpy==1.26.2
+
+ENTRYPOINT ["python3","src/mobidb_lite/__main__.py"]
