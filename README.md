@@ -19,10 +19,11 @@ Once the image is built, you can use it to analyze multi-fasta files.
 
     docker run --rm -v $PWD:/data mobidb-lite [options] [input_file] [output_file]
 
+Note: It is better to use the option "--force" , so that even if any of the predictors fail, the consensus is still calculated.  
 Example:
 
-    docker run --rm -v $PWD:/data mobidb-lite /data/data/first10sp.fasta output.tsv
+    docker run --rm -v $PWD:/data mobidb-lite --force /data/data/first10sp.fasta output.tsv
 
 To calculate the ensemble properties, you must specify --extra option with --format mobidb:
 
-    docker run --rm -v $PWD:/data mobidb-lite --extra --format mobidb /data/data/first10sp.fasta output.mjson
+    docker run --rm -v $PWD:/data mobidb-lite --force --extra --format mobidb /data/data/first10sp.fasta output.mjson
