@@ -4,9 +4,6 @@ MobiDB-lite is a lightweight tool for predicting intrinsic disorder in proteins.
 ## Building the Docker image
 Before running the tool, you need to build the Docker image.
 
-## Pulling the Docker image from docker hub
-Alternatively you can find the docker image [here](https://hub.docker.com/r/mahtamehdiabadi/mobidb-lite). 
-
 ### Step 1: clone this repository
     git clone https://github.com/BioComputingUP/MobiDB-lite_docker.git
     cd MobiDB-lite_docker
@@ -14,6 +11,9 @@ Alternatively you can find the docker image [here](https://hub.docker.com/r/maht
 ### Step 2: Build the Docker image
     docker build -t mobidb-lite .
 This creates a Docker image named mobidb-lite
+
+## Pulling the Docker image from docker hub
+Alternatively you can find the docker image [here](https://hub.docker.com/r/mahtamehdiabadi/mobidb-lite). 
 
 ## Running MobiDB-lite in Docker
 Once the image is built, you can use it to analyze multi-fasta files. 
